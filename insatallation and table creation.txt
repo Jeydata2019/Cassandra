@@ -1,0 +1,108 @@
+
+Cassandra Installation into HDP Sandbox:
+
+Check your python version - Hadoop needs 2.7  inorder to install Cassandra 
+in the HDP sandbox.
+
+--to check your python version
+python -V
+
+if your version is not Python 2.7 (earlier version i.e. 2.6 ) run below commands:
+
+Step:1
+--log in with root user
+su root
+
+
+Step2 run below commands:
+yum install scl-utils // to switch back python versions 
+yum install centos-release-scl-rh 
+yum install python27
+
+
+After installed/if you already have Python 2.7 installed run below command: 
+
+
+Congfiguaration: 
+
+--HDP sandbox doesnt come with required Cassandra repository:
+
+Step:1
+--log in with root user
+su root
+
+Step:2
+--go to etc/yum.repos.d to create directory:
+cd /etc/yum.repos.d
+
+Step:3
+--Create the directory and open the vi editor.
+vi datastax.repo
+
+Step4:
+--press "i" go to edit mode.
+
+--type below inside vi editor--
+
+[datastax]
+name = DataStax Repo for Apache Cassandra
+baseurl = http://rpm.datastax.com/community
+enabled = 1
+gpgcheck = 0
+
+
+--to save click on "Esc" Key
+--to write and save press ":" and "w" and "q" 
+--hit enter key
+-- you can verify the data inside the file
+--run below cat command
+cat datastax.repo
+
+now configaration has completed.
+
+Step:5
+--install casandra 
+yum install dsc30
+
+--provide 'y' and enter 
+
+Step:6 
+--verify Cassandra installation:
+service cassandra start
+cqlsh
+
+you will see "cqlsh>"
+
+
+
+Step:7 
+--Create keyspace(Database):
+1. CREATE KEYSPACE 
+2. preffered keyspace name(db)
+3. WITH keyword and replacation factor type 'SimpleStrategy', 'replication_factor':'1
+4. Durable_write =true
+
+CREATE KEYSPACE table2 WITH replication = {'class': 'SimpleStrategy', 'replication_factor':'1'} AND durable_writes = true;
+
+Step:8
+--use the Keypsace
+USE KeyspaceNAME;
+
+Step:9
+--create table
+CREATE TABLE users (user_id int, age int, gender text, occupation text, zip text, PRIMARY KEY (user_id));
+
+
+Step:10
+--to see the scheema
+DESCRIBE TABLE tablename;
+
+--simple Select query
+SELECT * FROM users;
+
+
+
+
+
+
+
